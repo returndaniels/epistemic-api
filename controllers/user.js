@@ -3,7 +3,7 @@ const User = require("../models/user");
 exports.createUser = async (req, res) => {
   const { fullname, username, email, password } = req.body;
   const isNewUser = await User.findOne({ email });
-  if (!isNewUser)
+  if (isNewUser)
     return res.json({
       success: false,
       message: "Este email já está em uso, tente fazer login",
