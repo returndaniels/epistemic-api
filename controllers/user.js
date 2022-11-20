@@ -31,7 +31,7 @@ exports.userSignIn = async (req, res) => {
       message: "Não foi encontrado um usuário com este email",
     });
 
-  const isMatch = await user.comparePassword(password);
+  const isMatch = user.password === password;
   if (!isMatch) {
     await User.findOneAndUpdate(
       { email },
