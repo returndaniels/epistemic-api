@@ -49,6 +49,8 @@ exports.userSignIn = async (req, res) => {
     });
   }
 
+  await User.findOneAndUpdate({ email }, { failedLoginAttempts: 0 });
+
   const userInfo = {
     username: user.username,
     fullname: user.fullname,
