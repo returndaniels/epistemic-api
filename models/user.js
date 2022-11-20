@@ -1,5 +1,5 @@
 const mongoose = require("../database");
-const bcrypt = require("bcrypt");
+var CryptoJS = require("crypto-js");
 
 const userSchema = new mongoose.Schema(
   {
@@ -30,12 +30,12 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre("save", function (next) {
   if (this.isModified("password")) {
-    bcrypt.hash(this.password, 8, (err, hash) => {
-      if (err) return next(err);
-
-      this.password = hash;
+    try {
+      this.password = CryptoJS.AES.encrypt(this.password, "7192").toString();
       next();
-    });
+    } catch (error) {
+      next(error);
+    }
   }
 });
 
