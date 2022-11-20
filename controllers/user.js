@@ -26,7 +26,12 @@ exports.createUser = async (req, res) => {
 exports.userSignIn = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  let user = null;
+  try {
+    user = await User.findOne({ email });
+  } catch (error) {
+    console.log("Falha ao buscar usuário.");
+  }
 
   if (!user) {
     console.log(`Usuário não encontrado (${email})`);
