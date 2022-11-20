@@ -2,7 +2,7 @@ const User = require("../models/user");
 
 exports.createUser = async (req, res) => {
   const { fullname, username, email, password } = req.body;
-  const isNewUser = await User.isThisEmailInUse(email);
+  const isNewUser = await User.findOne({ email });
   if (!isNewUser)
     return res.json({
       success: false,
