@@ -31,6 +31,12 @@ exports.userSignIn = async (req, res) => {
       message: "Não foi encontrado um usuário com este email",
     });
 
+  if (user.failedLoginAttempts >= 3)
+    return res.json({
+      success: false,
+      message: "Limite de tentativas excedido, tente recuperar a senha",
+    });
+
   const isMatch = user.password === password;
   if (!isMatch) {
     await User.findOneAndUpdate(
