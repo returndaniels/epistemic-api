@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema(
 userSchema.pre("save", function (next) {
   if (this.isModified("password")) {
     try {
-      this.password = CryptoJS.AES.encrypt(this.password, "7192").toString();
+      this.password = CryptoJS.MD5(this.password).toString();
       next();
     } catch (error) {
       next(error);
