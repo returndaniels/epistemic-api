@@ -30,6 +30,7 @@ exports.createUser = async (req, res) => {
     });
     await user.save();
     console.log(`Novo usuário criado (${email})`);
+    res.json({ success: true, user });
   } catch (error) {
     console.log(error);
     return res.json({
@@ -37,7 +38,6 @@ exports.createUser = async (req, res) => {
       message: "Falha ao cadastrar usuário",
     });
   }
-  res.json({ success: true, user });
 };
 
 exports.userSignIn = async (req, res) => {
