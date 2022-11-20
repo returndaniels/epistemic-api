@@ -89,3 +89,26 @@ exports.userSignIn = async (req, res) => {
     });
   }
 };
+
+exports.recoverPassword = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    console.log(`Usuário não encontrado (${email})`);
+    return res.json({
+      success: false,
+      message: "Não foi possível encontrar um usuário com este email",
+    });
+  }
+
+  console.log(`Usuário encontrado (${email})`);
+
+  /** TODO: enviar link de recuperação */
+
+  return res.json({
+    success: true,
+    message:
+      "Usuário encontrado, enviaremos um link de recuperação para o seu email",
+  });
+};
