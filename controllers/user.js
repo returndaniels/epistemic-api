@@ -2,8 +2,8 @@ const User = require("../models/user");
 
 exports.createUser = async (req, res) => {
   const { fullname, username, email, password } = req.body;
-  const isNewUser = await User.findOne({ email });
-  if (isNewUser) {
+  const withThisEmail = await User.findOne({ email });
+  if (withThisEmail) {
     console.log(`Email já cadastrado (${email})`);
     return res.json({
       success: false,
@@ -11,15 +11,32 @@ exports.createUser = async (req, res) => {
     });
   }
 
-  console.log(`Novo usuário criado (${email})`);
-  const user = await User({
-    username,
-    fullname,
-    email,
-    password,
-    failedLoginAttempts: 0,
-  });
-  await user.save();
+  const withThisUsername = await User.findOne({ username });
+  if (withThisUsername) {
+    console.log(`Username já cadastrado (${username})`);
+    return res.json({
+      success: false,
+      message: "Este username já está em uso, tente fazer login",
+    });
+  }
+
+  try {
+    const user = await User({
+      username,
+      fullname,
+      email,
+      password,
+      failedLoginAttempts: 0,
+    });
+    await user.save();
+    console.log(`Novo usuário criado (${email})`);
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      success: false,
+      message: "Falha ao cadastrar usuário",
+    });
+  }
   res.json({ success: true, user });
 };
 
